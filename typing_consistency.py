@@ -21,9 +21,15 @@ def isconsistent(obj: object, type_spec) -> bool:
         return True
 
     if origin := get_origin(type_spec):
+        args = get_args(type_spec)
+        if origin == Union:
+            for t in args:
+                if isconsistent(obj, t):
+                    return True
+            return False
+        # assume origin is a plain type
         if not isinstance(obj, origin):
             return False
-        args = get_args(type_spec)
         if origin == list:
             for e in cast(list, obj):
                 if not isconsistent(e, args[0]):
