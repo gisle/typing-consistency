@@ -49,7 +49,7 @@ def isconsistent(obj: object, type_spec) -> bool:
     if type(type_spec) == _TypedDictMeta:  # XXX no better test for TypedDict?
         if not isinstance(obj, dict):
             return False
-        for k, v in type_spec.__annotations__.items():
+        for k, v in get_type_hints(type_spec).items():
             if k not in obj:
                 return False
             if not isconsistent(obj[k], v):
