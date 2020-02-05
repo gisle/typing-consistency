@@ -10,6 +10,10 @@ def isconsistent(obj: object, type_spec) -> bool:
     """
 
     if type(type_spec) == type:
+        if type_spec == float:
+            type_spec = (float, int)
+        elif type_spec == complex:
+            type_spec = (complex, float, int)
         return isinstance(obj, type_spec)
 
     if type_spec == Any:

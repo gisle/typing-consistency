@@ -14,6 +14,10 @@ class BasicTests(unittest.TestCase):
         self.assertTrue(isconsistent(1, object))
 
         self.assertTrue(isconsistent(1, int))
+        self.assertTrue(isconsistent(1, float))
+        self.assertTrue(isconsistent(1.0, float))
+        self.assertTrue(isconsistent(1, complex))
+        self.assertTrue(isconsistent(1.0, complex))
         self.assertTrue(isconsistent("foo", str))
         self.assertTrue(isconsistent({}, dict))
         self.assertTrue(isconsistent([], list))
