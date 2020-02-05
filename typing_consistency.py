@@ -1,4 +1,5 @@
 from typing import *
+from typing import _TypedDictMeta
 
 class NYI(Exception):  # Not Yet Implemented
     pass
@@ -44,5 +45,15 @@ def isconsistent(obj: object, type_spec) -> bool:
             return True
         else:
             raise(NYI(f"Can't handle origin {origin} yet"))
+
+    if type(type_spec) == _TypedDictMeta:  # XXX no better test for TypedDict?
+        if not isinstance(obj, dict):
+            return False
+        for k, v in type_spec.__annotations__.items():
+            if k not in obj:
+                return False
+            if not isconsistent(obj[k], v):
+                return False
+        return True
 
     raise(NYI(f"Can't evaluate type {type_spec} yet"))
