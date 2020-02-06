@@ -57,6 +57,14 @@ class BasicTests(unittest.TestCase):
         self.assertTrue (isconsistent({"foo": 1}, Dict[str, int]))
         self.assertFalse(isconsistent({"foo": "bar"}, Dict[str, int]))
 
+    def testSet(self):
+        from typing import Set
+        self.assertTrue (isconsistent(set(), Set[str]))
+        self.assertFalse(isconsistent({}, Set[str]))
+        self.assertTrue (isconsistent({"foo"}, Set[str]))
+        self.assertTrue (isconsistent({1,2,3}, Set[int]))
+        self.assertFalse(isconsistent({1,2,"foo"}, Set[int]))
+
     def testTuple(self):
         from typing import Tuple
         self.assertTrue (isconsistent((1, "foo"), Tuple[int, str]))

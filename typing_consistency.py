@@ -52,6 +52,11 @@ def isconsistent(obj: object, type_spec) -> bool:
                     if not isconsistent(v, args[1]):
                         return False
                 return True
+            elif origin is set:
+                for k in obj:
+                    if not isconsistent(k, args[0]):
+                        return False
+                return True
             elif origin is tuple:
                 if len(args) == 2 and args[1] is ...:
                     for e in obj:
