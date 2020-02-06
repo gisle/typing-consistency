@@ -68,3 +68,6 @@ class BasicTests(unittest.TestCase):
         self.assertTrue(isconsistent((1,2), Tuple[int, ...]))
         self.assertTrue(isconsistent((1,2,3), Tuple[int, ...]))
         self.assertFalse(isconsistent((1,2,3,"foo"), Tuple[int, ...]))
+
+        self.assertTrue(isconsistent((), Tuple[()]))
+        self.assertFalse(isconsistent((1,), Tuple[()]))
