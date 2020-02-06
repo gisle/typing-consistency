@@ -34,6 +34,14 @@ class BasicTests(unittest.TestCase):
         self.assertFalse(isconsistent({}, list))
         self.assertFalse(isconsistent(X(), Y))
 
+    def testNewType(self):
+        from typing import NewType
+        UID = NewType("UID", int)
+        uid = UID(42)
+
+        self.assertTrue(isconsistent(uid, UID))
+        self.assertTrue(isconsistent(1, UID))
+
     def testList(self):
         from typing import List
         self.assertFalse(isconsistent(None, List[int]))

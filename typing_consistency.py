@@ -1,5 +1,6 @@
 from typing import *
 from typing import _TypedDictMeta
+from types import FunctionType
 
 class NYI(Exception):  # Not Yet Implemented
     pass
@@ -12,6 +13,10 @@ def isconsistent(obj: object, type_spec) -> bool:
 
     if type_spec is Any:
         return True
+
+    # Test for a NewType wrapper
+    if type(type_spec) is FunctionType and hasattr(type_spec, '__supertype__'):
+        type_spec = type_spec.__supertype__
 
     if type(type_spec) is type:
         if type_spec is float:
