@@ -10,19 +10,19 @@ def isconsistent(obj: object, type_spec) -> bool:
     work the same as ininstance().
     """
 
-    if type(type_spec) == type:
-        if type_spec == float:
+    if type_spec is Any:
+        return True
+
+    if type(type_spec) is type:
+        if type_spec is float:
             type_spec = (float, int)
-        elif type_spec == complex:
+        elif type_spec is complex:
             type_spec = (complex, float, int)
         return isinstance(obj, type_spec)
 
-    if type_spec == Any:
-        return True
-
     if origin := get_origin(type_spec):
         args = get_args(type_spec)
-        if origin == Union:
+        if origin is Union:
             for t in args:
                 if isconsistent(obj, t):
                     return True
@@ -30,19 +30,19 @@ def isconsistent(obj: object, type_spec) -> bool:
         # assume origin is a plain type
         if not isinstance(obj, origin):
             return False
-        if origin == list:
+        if origin is list:
             for e in cast(list, obj):
                 if not isconsistent(e, args[0]):
                     return False
             return True
-        elif origin == dict:
+        elif origin is dict:
             for k,v in obj.items():
                 if not isconsistent(k, args[0]):
                     return False
                 if not isconsistent(v, args[1]):
                     return False
             return True
-        elif origin == tuple:
+        elif origin is tuple:
             if len(obj) != len(args):
                 return False
             for i in range(len(args)):
@@ -52,7 +52,7 @@ def isconsistent(obj: object, type_spec) -> bool:
         else:
             raise(NYI(f"Can't handle origin {origin} yet"))
 
-    if type(type_spec) == _TypedDictMeta:  # XXX no better test for TypedDict?
+    if type(type_spec) is _TypedDictMeta:  # XXX no better test for TypedDict?
         if not isinstance(obj, dict):
             return False
         for k, v in get_type_hints(type_spec).items():
