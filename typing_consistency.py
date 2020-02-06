@@ -48,6 +48,11 @@ def isconsistent(obj: object, type_spec) -> bool:
                         return False
                 return True
             elif origin is tuple:
+                if len(args) == 2 and args[1] is ...:
+                    for e in obj:
+                        if not isconsistent(e, args[0]):
+                            return False
+                    return True
                 if len(obj) != len(args):
                     return False
                 for i in range(len(args)):
