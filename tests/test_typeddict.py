@@ -19,8 +19,6 @@ class Movie(TypedDict):
 class EmptyDict(TypedDict):
     pass
 
-
-
 class TypedDictTests(unittest.TestCase):
     def testNamedDict(self):
         d = {
