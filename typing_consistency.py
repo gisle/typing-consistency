@@ -18,6 +18,9 @@ def isconsistent(obj: object, type_spec) -> bool:
     if type(type_spec) is FunctionType and hasattr(type_spec, '__supertype__'):
         type_spec = type_spec.__supertype__
 
+    if type_spec is None:
+        type_spec = type(None)
+
     if type(type_spec) is type:
         if type_spec is float:
             type_spec = (float, int)
