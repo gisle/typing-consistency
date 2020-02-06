@@ -27,37 +27,44 @@ def isconsistent(obj: object, type_spec) -> bool:
 
     if origin := get_origin(type_spec):
         args = get_args(type_spec)
+
         if origin is Union:
             for t in args:
                 if isconsistent(obj, t):
                     return True
             return False
-        elif origin is Literal:
+
+        if origin is Literal:
             for lit in args:
                 if type(obj) is type(lit) and obj == lit:
                     return True
             return False
-        elif type(origin) is type:
+
+        if type(origin) is type:
             if not isinstance(obj, origin):
                 return False
+
             if origin is list:
                 for e in cast(list, obj):
                     if not isconsistent(e, args[0]):
                         return False
                 return True
-            elif origin is dict:
+
+            if origin is dict:
                 for k,v in obj.items():
                     if not isconsistent(k, args[0]):
                         return False
                     if not isconsistent(v, args[1]):
                         return False
                 return True
-            elif origin is set:
+
+            if origin is set:
                 for k in obj:
                     if not isconsistent(k, args[0]):
                         return False
                 return True
-            elif origin is tuple:
+
+            if origin is tuple:
                 if len(args) == 2 and args[1] is ...:
                     for e in obj:
                         if not isconsistent(e, args[0]):
@@ -71,10 +78,10 @@ def isconsistent(obj: object, type_spec) -> bool:
                     if not isconsistent(obj[i], args[i]):
                         return False
                 return True
-            else:
-                raise(NYI(f"Can't handle base origin {origin} yet"))
-        else:
-            raise(NYI(f"Can't handle origin {origin} yet"))
+
+            raise(NYI(f"Can't handle base origin {origin} yet"))
+
+        raise(NYI(f"Can't handle origin {origin} yet"))
 
     if type(type_spec) is _TypedDictMeta:  # XXX no better test for TypedDict?
         if not isinstance(obj, dict):
