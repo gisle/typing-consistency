@@ -1,6 +1,6 @@
 import unittest
 from typing_consistency import isconsistent
-from typing import Union, Optional
+from typing import Union, Optional, Literal
 
 class UnionTests(unittest.TestCase):
     def testUnion(self):
@@ -20,3 +20,7 @@ class UnionTests(unittest.TestCase):
         self.assertTrue(isconsistent(None, t))
         self.assertTrue(isconsistent(1, t))
         self.assertFalse(isconsistent("foo", t))
+
+        t = Literal["x", "y"]
+        self.assertTrue(isconsistent("y", t))
+        self.assertFalse(isconsistent("z", t))

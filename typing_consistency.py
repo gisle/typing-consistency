@@ -27,28 +27,35 @@ def isconsistent(obj: object, type_spec) -> bool:
                 if isconsistent(obj, t):
                     return True
             return False
-        # assume origin is a plain type
-        if not isinstance(obj, origin):
+        elif origin is Literal:
+            for lit in args:
+                if type(obj) is type(lit) and obj == lit:
+                    return True
             return False
-        if origin is list:
-            for e in cast(list, obj):
-                if not isconsistent(e, args[0]):
-                    return False
-            return True
-        elif origin is dict:
-            for k,v in obj.items():
-                if not isconsistent(k, args[0]):
-                    return False
-                if not isconsistent(v, args[1]):
-                    return False
-            return True
-        elif origin is tuple:
-            if len(obj) != len(args):
+        elif type(origin) is type:
+            if not isinstance(obj, origin):
                 return False
-            for i in range(len(args)):
-                if not isconsistent(obj[i], args[i]):
+            if origin is list:
+                for e in cast(list, obj):
+                    if not isconsistent(e, args[0]):
+                        return False
+                return True
+            elif origin is dict:
+                for k,v in obj.items():
+                    if not isconsistent(k, args[0]):
+                        return False
+                    if not isconsistent(v, args[1]):
+                        return False
+                return True
+            elif origin is tuple:
+                if len(obj) != len(args):
                     return False
-            return True
+                for i in range(len(args)):
+                    if not isconsistent(obj[i], args[i]):
+                        return False
+                return True
+            else:
+                raise(NYI(f"Can't handle base origin {origin} yet"))
         else:
             raise(NYI(f"Can't handle origin {origin} yet"))
 
