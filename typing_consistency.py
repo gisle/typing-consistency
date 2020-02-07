@@ -93,11 +93,13 @@ def isconsistent(obj: object, type_hint: Any) -> bool:
 
         raise(NYI(f"Can't handle origin {origin} yet"))
 
-    if type(type_hint) is _TypedDictMeta:  # XXX no better test for TypedDict?
+    if type(type_hint) is _TypedDictMeta:
         if not isinstance(obj, dict):
             return False
         for k, v in get_type_hints(type_hint).items():
-            if k not in obj: # XXX check for __total__
+            # XXX Wait for https://github.com/python/cpython/pull/17214 to be able
+            # to discover what keys are optional
+            if k not in obj:
                 return False
             if not isconsistent(obj[k], v):
                 return False
