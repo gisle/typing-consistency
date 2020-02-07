@@ -16,6 +16,9 @@ def isconsistent(obj: object, type_hint: Any) -> bool:
     if type_hint is Any:
         return True
 
+    if type_hint is NoReturn:
+        return False
+
     # Test for a NewType wrapper
     if type(type_hint) is FunctionType and hasattr(type_hint, '__supertype__'):
         type_hint = type_hint.__supertype__
