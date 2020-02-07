@@ -1,6 +1,8 @@
 from typing import *
 from typing import _TypedDictMeta
 from types import FunctionType
+from abc import ABCMeta
+import collections.abc
 
 class NYI(Exception):  # Not Yet Implemented
     pass
@@ -21,7 +23,7 @@ def isconsistent(obj: object, type_spec) -> bool:
     if type_spec is None:
         type_spec = type(None)
 
-    if type(type_spec) is type:
+    if type(type_spec) is type or type(type_spec) is ABCMeta:
         if type_spec is float:
             type_spec = (float, int)
         elif type_spec is complex:
@@ -43,20 +45,23 @@ def isconsistent(obj: object, type_spec) -> bool:
                     return True
             return False
 
-        if type(origin) is type:
+        if type(origin) is type or type(origin) is ABCMeta:
             if not isinstance(obj, origin):
                 return False
 
             if (origin is list or
                 origin is set or
-                (origin is tuple and len(args) == 2 and args[1] is ...)
+                (origin is tuple and len(args) == 2 and args[1] is ...) or
+                origin is collections.abc.Sequence
             ):
                 for e in obj:
                     if not isconsistent(e, args[0]):
                         return False
                 return True
 
-            if origin is dict:
+            if (origin is dict or
+                origin is collections.abc.Mapping
+            ):
                 for k,v in obj.items():
                     if not isconsistent(k, args[0]):
                         return False
