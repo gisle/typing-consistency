@@ -94,3 +94,12 @@ class BasicTests(unittest.TestCase):
 
         self.assertTrue(isconsistent((), Tuple[()]))
         self.assertFalse(isconsistent((1,), Tuple[()]))
+
+    def testType(self):
+        from typing import Type
+        class X: pass
+        class Y(X): pass
+
+        self.assertTrue(isconsistent(X, Type[X]))
+        self.assertTrue(isconsistent(Y, Type[X]))
+        self.assertFalse(isconsistent(X(), Type[X]))

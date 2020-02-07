@@ -79,6 +79,13 @@ def isconsistent(obj: object, type_hint: Any) -> bool:
                         return False
                 return True
 
+            if origin is type:
+                # XXX handle Type[Union[X, Y]]
+                # XXX handle Type[Any]
+                if issubclass(obj, args[0]):
+                    return True
+                return False
+
             raise(NYI(f"Can't handle base origin {origin} yet"))
 
         raise(NYI(f"Can't handle origin {origin} yet"))
