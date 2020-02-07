@@ -9,7 +9,7 @@ class NYI(Exception):  # Not Yet Implemented
 
 def isconsistent(obj: object, type_hint: Any) -> bool:
     """Check if the given object is consistent with the given
-    PEP 484 typespec.  For classes and built in types it will
+    PEP 484 type hint.  For classes and built in types it will
     work the same as ininstance().
     """
 
