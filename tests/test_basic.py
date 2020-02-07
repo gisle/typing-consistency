@@ -15,6 +15,7 @@ class BasicTests(unittest.TestCase):
         self.assertTrue(isconsistent(1, object))
 
         self.assertTrue(isconsistent(1, int))
+        self.assertTrue(isconsistent(True, int))
         self.assertTrue(isconsistent(1, float))
         self.assertTrue(isconsistent(1.0, float))
         self.assertTrue(isconsistent(1, complex))
@@ -33,6 +34,7 @@ class BasicTests(unittest.TestCase):
         # and some inconsistent ones
         self.assertFalse(isconsistent(1, None))
         self.assertFalse(isconsistent(1, str))
+        self.assertFalse(isconsistent(1, bool))
         self.assertFalse(isconsistent({}, list))
         self.assertFalse(isconsistent(X(), Y))
 
