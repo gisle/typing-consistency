@@ -7,31 +7,31 @@ import collections.abc
 class NYI(Exception):  # Not Yet Implemented
     pass
 
-def isconsistent(obj: object, type_spec) -> bool:
+def isconsistent(obj: object, type_hint: Any) -> bool:
     """Check if the given object is consistent with the given
     PEP 484 typespec.  For classes and built in types it will
     work the same as ininstance().
     """
 
-    if type_spec is Any:
+    if type_hint is Any:
         return True
 
     # Test for a NewType wrapper
-    if type(type_spec) is FunctionType and hasattr(type_spec, '__supertype__'):
-        type_spec = type_spec.__supertype__
+    if type(type_hint) is FunctionType and hasattr(type_hint, '__supertype__'):
+        type_hint = type_hint.__supertype__
 
-    if type_spec is None:
-        type_spec = type(None)
+    if type_hint is None:
+        type_hint = type(None)
 
-    if type(type_spec) is type or type(type_spec) is ABCMeta:
-        if type_spec is float:
-            type_spec = (float, int)
-        elif type_spec is complex:
-            type_spec = (complex, float, int)
-        return isinstance(obj, type_spec)
+    if type(type_hint) is type or type(type_hint) is ABCMeta:
+        if type_hint is float:
+            type_hint = (float, int)
+        elif type_hint is complex:
+            type_hint = (complex, float, int)
+        return isinstance(obj, type_hint)
 
-    if origin := get_origin(type_spec):
-        args = get_args(type_spec)
+    if origin := get_origin(type_hint):
+        args = get_args(type_hint)
 
         if origin is Union:
             for t in args:
@@ -83,14 +83,14 @@ def isconsistent(obj: object, type_spec) -> bool:
 
         raise(NYI(f"Can't handle origin {origin} yet"))
 
-    if type(type_spec) is _TypedDictMeta:  # XXX no better test for TypedDict?
+    if type(type_hint) is _TypedDictMeta:  # XXX no better test for TypedDict?
         if not isinstance(obj, dict):
             return False
-        for k, v in get_type_hints(type_spec).items():
+        for k, v in get_type_hints(type_hint).items():
             if k not in obj: # XXX check for __total__
                 return False
             if not isconsistent(obj[k], v):
                 return False
         return True
 
-    raise(NYI(f"Can't evaluate type {type_spec} yet"))
+    raise(NYI(f"Can't handle type hint {type_hint} yet"))
