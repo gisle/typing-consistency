@@ -47,8 +47,11 @@ def isconsistent(obj: object, type_spec) -> bool:
             if not isinstance(obj, origin):
                 return False
 
-            if origin is list:
-                for e in cast(list, obj):
+            if (origin is list or
+                origin is set or
+                (origin is tuple and len(args) == 2 and args[1] is ...)
+            ):
+                for e in obj:
                     if not isconsistent(e, args[0]):
                         return False
                 return True
@@ -61,18 +64,7 @@ def isconsistent(obj: object, type_spec) -> bool:
                         return False
                 return True
 
-            if origin is set:
-                for k in obj:
-                    if not isconsistent(k, args[0]):
-                        return False
-                return True
-
             if origin is tuple:
-                if len(args) == 2 and args[1] is ...:
-                    for e in obj:
-                        if not isconsistent(e, args[0]):
-                            return False
-                    return True
                 if len(args) == 1 and args[0] == ():  # Empty tuple type
                     args = ()
                 if len(obj) != len(args):
