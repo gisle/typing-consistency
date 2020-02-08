@@ -58,6 +58,9 @@ class BasicTests(unittest.TestCase):
         self.assertTrue (isconsistent([1],  List[int]))
         self.assertFalse(isconsistent([1,"foo"], List[int]))
 
+        from typing import Iterable
+        self.assertTrue (isconsistent([1],  Iterable[int]))
+
         from typing import Sequence
         self.assertFalse(isconsistent(None, Sequence[int]))
         self.assertTrue (isconsistent([],   Sequence[int]))

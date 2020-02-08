@@ -55,6 +55,7 @@ def isconsistent(obj: object, type_hint: Any) -> bool:
             if (origin is list or
                 origin is set or
                 (origin is tuple and len(args) == 2 and args[1] is ...) or
+                origin is collections.abc.Iterable or
                 origin is collections.abc.Sequence
             ):
                 for e in obj:
